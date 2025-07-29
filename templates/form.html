@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Your Student Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .card-container {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .instruction {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: block;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        button {
+            background: linear-gradient(to right, #56ab2f, #a8e063);
+            border: none;
+            color: white;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #3e8e41, #7dd56f);
+            transform: scale(1.02);
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <h2>Create Your Student Card</h2>
+        <p class="instruction">
+            Please fill in the form below to generate your personalized student card.<br>
+            Make sure your photo is in PNG or JPEG format.
+        </p>
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+        <form action="/generate" method="post" enctype="multipart/form-data">
+            <label for="name">Full Name</label>
+            <input type="text" name="name" id="name" placeholder="e.g. John Doe" required>
+
+            <label for="id_number">ID Number</label>
+            <input type="text" name="id_number" id="id_number" placeholder="e.g. 123456789" required>
+
+            <label for="file">Upload Profile Image</label>
+            <input type="file" name="file" id="file" accept=".png,.jpg,.jpeg" required>
+
+            <button type="submit">Generate Card</button>
+        </form>
+    </div>
+</body>
+</html>
