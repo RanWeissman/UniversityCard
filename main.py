@@ -32,7 +32,6 @@ def generate_card(
     request: Request,
     name: str = Form(...),
     id_number: str = Form(...),
-    b_date: str = Form(...),
     file: UploadFile = File(...)
 ):
     if file.content_type not in ["image/png", "image/jpeg"]:
@@ -51,7 +50,7 @@ def generate_card(
     output_path = f"static/cards/{card_filename}"
     template_path = "template.png"  # Adjust this path as needed
 
-    create_card(name, id_number, b_date, image_path, template_path, output_path)
+    create_card(name, id_number, image_path, template_path, output_path)
 
     return templates.TemplateResponse("result.html", {
         "request": request,
