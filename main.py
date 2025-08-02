@@ -15,6 +15,9 @@ from card_generator import create_card  # Replace with your actual import
 
 app = FastAPI()
 
+
+os.makedirs("static", exist_ok=True)
+
 # Mount static folder for serving images
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
