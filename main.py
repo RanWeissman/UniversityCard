@@ -7,6 +7,8 @@ import shutil
 import uuid
 import os
 from pathlib import Path
+import uvicorn
+
 
 # Import your card creation function
 from card_generator import create_card  # Replace with your actual import
@@ -56,3 +58,15 @@ def generate_card(
         "request": request,
         "card_url": f"/static/cards/{card_filename}"
     })
+
+
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",       # module:attribute
+        host="127.0.0.1",  # or "0.0.0.0" to listen on all interfaces
+        port=8000,
+        reload=True       # set to False in production
+    )
+
+
+
