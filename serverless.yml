@@ -1,0 +1,21 @@
+service: university-card
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+
+functions:
+  getCard:
+    handler: handler.getCard
+    events:
+      - http:
+          path: card
+          method: get
+
+  postCard:
+    handler: handler.postCard
+    events:
+      - http:
+          path: card
+          method: post

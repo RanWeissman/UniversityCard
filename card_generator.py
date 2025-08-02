@@ -1,8 +1,6 @@
 # pip install Pillow
 # pip install fastapi[all]
-
-# uvicorn main:app --reload
-
+#  pip install Mangum
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -71,16 +69,16 @@ def create_card(name, id_n, profile_path, template_path, output_path):
     template = round_card_edges(template, corner_radius=40)
     template.save(output_path)
 
-
-def main():
-    in_name = "Ran Weissman"
-    in_id = "312236466"
-    in_profile_path = "self_photo.jpeg"  # TODO: PNG OR JPEG
-    in_template_path = "template.png"
-    in_output_path = "business_card_output.png"
-
-    create_card(in_name, in_id, in_profile_path, in_template_path, in_output_path)
-
-
-if __name__ == "__main__":
-    main()
+#
+# def main():
+#     in_name = "Ran Weissman"
+#     in_id = "312236466"
+#     in_profile_path = "self_photo.jpeg"  # TODO: PNG OR JPEG
+#     in_template_path = "empty_card.png"
+#     in_output_path = "business_card_output.png"
+#
+#     create_card(in_name, in_id, in_profile_path, in_template_path, in_output_path)
+#
+#
+# if __name__ == "__main__":
+#     main()
