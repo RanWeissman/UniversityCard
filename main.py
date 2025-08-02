@@ -1,36 +1,32 @@
+import shutil
+import uuid
+import os
+from pathlib import Path
 
 from fastapi import FastAPI, Request, Form, UploadFile, File
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import shutil
-import uuid
-import os
-from pathlib import Path
 import uvicorn
 
-
-# Import your card creation function
 from card_generator import create_card  # Replace with your actual import
 
 app = FastAPI()
 
-
 os.makedirs("static", exist_ok=True)
 
-# Mount static folder for serving images
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Jinja2 templates
 templates = Jinja2Templates(directory="templates")
 
-# Ensure folders exist
 Path("static/cards").mkdir(parents=True, exist_ok=True)
 Path("uploads").mkdir(parents=True, exist_ok=True)
+
 
 @app.get("/", response_class=HTMLResponse)
 def form_page(request: Request):
     return templates.TemplateResponse("form.html", {"request": request})
+
 
 @app.post("/generate", response_class=HTMLResponse)
 def generate_card(
@@ -70,6 +66,3 @@ if __name__ == "__main__":
         port=8000,
         reload=True       # set to False in production
     )
-
-
-
