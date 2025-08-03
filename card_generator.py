@@ -4,6 +4,8 @@
 # uvicorn main:app --reload
 
 from PIL import Image, ImageDraw, ImageFont
+import base64
+from io import BytesIO
 
 
 def round_card_edges(image: Image, corner_radius: float = 40):
@@ -16,13 +18,14 @@ def round_card_edges(image: Image, corner_radius: float = 40):
     return rounded
 
 
-def create_rounded_profile_photo(image_path: str):
+def create_rounded_profile_photo(user_image: Image):
     # Open and resize image
     size = (225, 225)
     corner_radius = 20
     border_width = 5
     border_color = "orange"
-    img = Image.open(image_path).convert("RGBA").resize(size)
+
+    user_image = user_image.resize(size, Image.Resampling.LANCZOS)
 
     # Create mask with rounded corners
     mask = Image.new("L", size, 0)
@@ -31,7 +34,7 @@ def create_rounded_profile_photo(image_path: str):
 
     # Apply the rounded mask
     rounded_img = Image.new("RGBA", size)
-    rounded_img.paste(img, (0, 0), mask)
+    rounded_img.paste(user_image, (0, 0), mask)
 
     # Add border/frame
     border_size = (size[0] + 2 * border_width, size[1] + 2 * border_width)
@@ -55,9 +58,9 @@ def create_rounded_profile_photo(image_path: str):
     return framed
 
 
-def create_card(name: str, id_n: str, profile_path: str, template_path: str, output_path: str):
+def create_card(name: str, id_n: str, template_path: str, user_image: Image):
     template = Image.open(template_path).convert("RGBA")
-    profile = create_rounded_profile_photo(image_path=profile_path)
+    profile = create_rounded_profile_photo(user_image)
     template.paste(profile, (75, 225), profile)
 
     draw = ImageDraw.Draw(template)
@@ -71,7 +74,15 @@ def create_card(name: str, id_n: str, profile_path: str, template_path: str, out
     draw.text((400, 340), "2025-2026", font=font, fill="black")
 
     template = round_card_edges(template, corner_radius=40)
-    template.save(output_path)
+    return template
+
+
+def image_to_base64(image: Image.Image) -> str:
+    buffer = BytesIO()
+    image.save(buffer, format="PNG")
+    buffer.seek(0)
+    encoded_image = base64.b64encode(buffer.read()).decode("utf-8")
+    return f"data:image/png;base64,{encoded_image}"
 
 
 # def main():
