@@ -6,7 +6,7 @@
 from PIL import Image, ImageDraw, ImageFont
 
 
-def round_card_edges(image, corner_radius=40):
+def round_card_edges(image: Image, corner_radius: float = 40):
     mask = Image.new("L", image.size, 0)
     draw = ImageDraw.Draw(mask)
     draw.rounded_rectangle((0, 0, *image.size), radius=corner_radius, fill=255)
@@ -16,8 +16,12 @@ def round_card_edges(image, corner_radius=40):
     return rounded
 
 
-def create_rounded_profile_photo(image_path, size=(120, 120), corner_radius=20, border_width=5, border_color="black"):
+def create_rounded_profile_photo(image_path: str):
     # Open and resize image
+    size = (225, 225)
+    corner_radius = 20
+    border_width = 5
+    border_color = "orange"
     img = Image.open(image_path).convert("RGBA").resize(size)
 
     # Create mask with rounded corners
@@ -40,8 +44,7 @@ def create_rounded_profile_photo(image_path, size=(120, 120), corner_radius=20, 
     )
     draw.rounded_rectangle(
         (border_width, border_width, border_size[0] - border_width, border_size[1] - border_width),
-        radius=corner_radius, fill=0
-    )
+        radius=corner_radius, fill=0)
 
     draw_framed = ImageDraw.Draw(framed)
     draw_framed.bitmap((0, 0), border_mask, fill=border_color)
@@ -52,10 +55,9 @@ def create_rounded_profile_photo(image_path, size=(120, 120), corner_radius=20, 
     return framed
 
 
-def create_card(name, id_n, profile_path, template_path, output_path):
+def create_card(name: str, id_n: str, profile_path: str, template_path: str, output_path: str):
     template = Image.open(template_path).convert("RGBA")
-    profile = create_rounded_profile_photo(image_path=profile_path, size=(225, 225), corner_radius=20, border_width=5,
-                                           border_color="orange")
+    profile = create_rounded_profile_photo(image_path=profile_path)
     template.paste(profile, (75, 225), profile)
 
     draw = ImageDraw.Draw(template)
