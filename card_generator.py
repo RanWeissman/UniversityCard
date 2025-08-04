@@ -1,4 +1,3 @@
-
 import os
 import threading
 import time
@@ -41,11 +40,20 @@ def create_rounded_profile_photo(user_image: Image):
     border_mask = Image.new("L", border_size, 0)
     draw = ImageDraw.Draw(border_mask)
     draw.rounded_rectangle(
-        (0, 0, border_size[0], border_size[1]), radius=corner_radius + border_width, fill=255
+        (0, 0, border_size[0], border_size[1]),
+        radius=corner_radius + border_width,
+        fill=255,
     )
     draw.rounded_rectangle(
-        (border_width, border_width, border_size[0] - border_width, border_size[1] - border_width),
-        radius=corner_radius, fill=0)
+        (
+            border_width,
+            border_width,
+            border_size[0] - border_width,
+            border_size[1] - border_width,
+        ),
+        radius=corner_radius,
+        fill=0,
+    )
 
     draw_framed = ImageDraw.Draw(framed)
     draw_framed.bitmap((0, 0), border_mask, fill=border_color)
@@ -83,4 +91,5 @@ def delete_file_later(path, delay=10):
             print(f"[INFO] Deleted temporary file: {path}")
         except Exception as e:
             print(f"[ERROR] Could not delete file: {path}. Reason: {e}")
+
     threading.Thread(target=delayed_delete).start()

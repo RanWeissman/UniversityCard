@@ -1,10 +1,9 @@
-
 from io import BytesIO
 import os
 from pathlib import Path
 import uuid
 
-from card_generator import create_card, delete_file_later  # Replace with your actual import
+from card_generator import create_card, delete_file_later
 from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -34,22 +33,13 @@ def generate_card(
     request: Request,
     name: str = Form(...),
     id_number: str = Form(...),
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
 ):
     if file.content_type not in ["image/png", "image/jpeg"]:
-        return templates.TemplateResponse("form.html", {
-            "request": request,
-            "error": "Only PNG and JPEG files are allowed."
-        })
-
-    # ext = ".png" if file.content_type == "image/png" else ".jpg"
-    # image_filename = f"{uuid.uuid4()}{ext}"
-    # image_path = f"uploads/{image_filename}"
-    # with open(image_path, "wb") as buffer:
-    #     shutil.copyfileobj(file.file, buffer)
-    #
-    # output_path = f"static/cards/{card_filename}"
-    # template_path = "template.png"  # Adjust this path as needed
+        return templates.TemplateResponse(
+            "form.html",
+            {"request": request, "error": "Only PNG and JPEG files are allowed."},
+        )
 
     file_bytes = file.file.read()
     user_image = Image.open(BytesIO(file_bytes)).convert("RGBA")
@@ -60,16 +50,16 @@ def generate_card(
     card_image.save(f"static/cards/{card_filename}")
     delete_file_later(f"static/cards/{card_filename}", delay=5)
 
-    return templates.TemplateResponse("result.html", {
-        "request": request,
-        "card_url": f"/static/cards/{card_filename}"
-    })
+    return templates.TemplateResponse(
+        "result.html",
+        {"request": request, "card_url": f"/static/cards/{card_filename}"},
+    )
 
 
 if __name__ == "__main__":
     uvicorn.run(
-        "main:app",       # module:attribute
+        "main:app",  # module:attribute
         host="127.0.0.1",  # or "0.0.0.0" to listen on all interfaces
         port=8000,
-        reload=True       # set to False in production
+        reload=True,  # set to False in production
     )
