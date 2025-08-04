@@ -10,7 +10,7 @@ from fastapi.templating import Jinja2Templates
 import uvicorn
 from io import BytesIO
 from PIL import Image
-from card_generator import create_card, image_to_base64  # Replace with your actual import
+from card_generator import create_card, delete_file_later  # Replace with your actual import
 
 app = FastAPI()
 
@@ -58,6 +58,7 @@ def generate_card(
     card_image = create_card(name, id_number, template_path, user_image)
     card_filename = f"card_{uuid.uuid4()}.png"
     card_image.save(f"static/cards/{card_filename}")
+    delete_file_later(f"static/cards/{card_filename}", delay=5)
 
     return templates.TemplateResponse("result.html", {
         "request": request,
