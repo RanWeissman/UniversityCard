@@ -1,4 +1,3 @@
-import shutil
 import uuid
 import os
 from pathlib import Path
