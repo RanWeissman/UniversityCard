@@ -1,0 +1,20 @@
+
+[flake8]
+max-line-length = 120
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    env,
+    build,
+    dist,
+    migrations
+ignore =
+    E203,
+    W503,
+    F403,
+
+enable-extensions = G
+
+import-order-style = google
+application-import-names = UniCard

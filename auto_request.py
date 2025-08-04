@@ -10,10 +10,8 @@ data = {
 }
 
 # File upload (adjust file path to a real image on your system)
-files = {
-    "file": ("profile_photo.jpg", open("C:\\Users\\Ran\\Desktop\\Ran\\Projects\\UniCard\\profile_photo.jpg", "rb"),
-             "image/jpeg")
-        }
+files = {"file": ("profile_photo.jpg", open("C:\\Users\\Ran\\Desktop\\Ran\\Projects\\UniCard\\profile_photo.jpg", "rb"),
+                  "image/jpeg")}
 
 response = requests.post(url, data=data, files=files)
 

@@ -1,15 +1,16 @@
-import uuid
+
+from io import BytesIO
 import os
 from pathlib import Path
+import uuid
 
-from fastapi import FastAPI, Request, Form, UploadFile, File
+from card_generator import create_card, delete_file_later  # Replace with your actual import
+from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import uvicorn
-from io import BytesIO
 from PIL import Image
-from card_generator import create_card, delete_file_later  # Replace with your actual import
+import uvicorn
 
 app = FastAPI()
 

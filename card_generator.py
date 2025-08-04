@@ -1,12 +1,9 @@
-# pip install Pillow
-# pip install fastapi[all]
 
-# uvicorn main:app --reload
-
-from PIL import Image, ImageDraw, ImageFont
+import os
 import threading
 import time
-import os
+
+from PIL import Image, ImageDraw, ImageFont
 
 
 def round_card_edges(image: Image, corner_radius: float = 40):
