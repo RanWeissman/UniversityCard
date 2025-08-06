@@ -4,8 +4,9 @@
 # uvicorn main:app --reload
 
 from PIL import Image, ImageDraw, ImageFont
-import base64
-from io import BytesIO
+import threading
+import time
+import os
 
 
 def round_card_edges(image: Image, corner_radius: float = 40):
@@ -77,12 +78,16 @@ def create_card(name: str, id_n: str, template_path: str, user_image: Image):
     return template
 
 
-def image_to_base64(image: Image.Image) -> str:
-    buffer = BytesIO()
-    image.save(buffer, format="PNG")
-    buffer.seek(0)
-    encoded_image = base64.b64encode(buffer.read()).decode("utf-8")
-    return f"data:image/png;base64,{encoded_image}"
+def delete_file_later(path, delay=10):
+    def delayed_delete():
+        time.sleep(delay)
+        try:
+            os.remove(path)
+            print(f"[INFO] Deleted temporary file: {path}")
+        except Exception as e:
+            print(f"[ERROR] Could not delete file: {path}. Reason: {e}")
+    threading.Thread(target=delayed_delete).start()
+
 
 
 # def main():
