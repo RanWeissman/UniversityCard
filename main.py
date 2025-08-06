@@ -8,8 +8,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
-
-from card_generator import create_card  # Replace with your actual import
+from io import BytesIO
+from PIL import Image
+from card_generator import create_card, delete_file_later  # Replace with your actual import
 
 app = FastAPI()
 
@@ -41,17 +42,23 @@ def generate_card(
             "error": "Only PNG and JPEG files are allowed."
         })
 
-    ext = ".png" if file.content_type == "image/png" else ".jpg"
-    image_filename = f"{uuid.uuid4()}{ext}"
-    image_path = f"uploads/{image_filename}"
-    with open(image_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    # ext = ".png" if file.content_type == "image/png" else ".jpg"
+    # image_filename = f"{uuid.uuid4()}{ext}"
+    # image_path = f"uploads/{image_filename}"
+    # with open(image_path, "wb") as buffer:
+    #     shutil.copyfileobj(file.file, buffer)
+    #
+    # output_path = f"static/cards/{card_filename}"
+    # template_path = "template.png"  # Adjust this path as needed
 
+    file_bytes = file.file.read()
+    user_image = Image.open(BytesIO(file_bytes)).convert("RGBA")
+    template_path = "template.png"
+
+    card_image = create_card(name, id_number, template_path, user_image)
     card_filename = f"card_{uuid.uuid4()}.png"
-    output_path = f"static/cards/{card_filename}"
-    template_path = "template.png"  # Adjust this path as needed
-
-    create_card(name, id_number, image_path, template_path, output_path)
+    card_image.save(f"static/cards/{card_filename}")
+    delete_file_later(f"static/cards/{card_filename}", delay=5)
 
     return templates.TemplateResponse("result.html", {
         "request": request,
